@@ -19,7 +19,11 @@ static t_bool	coder_compile(t_coder *c)
 	pthread_mutex_unlock(&c->sim->state_mtx);
 	print_state(c->sim, c->id, "is compiling");
 	if (!sys_sleep(c->sim->t_compile, c->sim))
+	{
+		dongle_release(c->d2);
+		dongle_release(c->d1);
 		return (FALSE);
+	}
 	pthread_mutex_lock(&c->sim->state_mtx);
 	c->compile_count++;
 	pthread_mutex_unlock(&c->sim->state_mtx);
