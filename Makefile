@@ -1,4 +1,5 @@
 NAME		= codexion
+HEADERS	= coders/codexion.h
 
 CC			= cc
 CFLAGS		= -Wall -Wextra -Werror -pthread
@@ -7,7 +8,7 @@ SRCS_FILES	= coder.c codexion.c dongle.c heap.c init.c monitor.c parse.c utils.c
 SRCS		= $(addprefix coders/, $(SRCS_FILES))
 OBJS		= $(SRCS:.c=.o)
 
-%.o: %.c codexion.h
+%.o: %.c $(HEADERS)
 	$(CC) $(CFLAGS) -c $< -o $@
 
 all: $(NAME)

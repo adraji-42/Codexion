@@ -79,7 +79,7 @@ static int	init_coders(t_sim *sim)
 	return (TRUE);
 }
 
-int	init_sim(t_sim *sim)
+t_bool	init_sim(t_sim *sim)
 {
 	sim->dongles = malloc(sizeof(t_dongle) * sim->num_coders);
 	if (!sim->dongles)

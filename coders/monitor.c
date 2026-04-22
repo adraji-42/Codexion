@@ -24,7 +24,7 @@ static int	coder_dead(t_coder *c)
 	now = get_time_ms();
 	if (now >= limit && !c->sim->sim_stop)
 	{
-		c->sim->sim_stop = 1;
+		c->sim->sim_stop = TRUE;
 		dead = TRUE;
 	}
 	pthread_mutex_unlock(&c->sim->state_mtx);
@@ -45,19 +45,19 @@ static int	all_compiled(t_sim *sim)
 	if (sim->target_compiles < 0)
 		return (0);
 	i = 0;
-	done = 1;
+	done = TRUE;
 	pthread_mutex_lock(&sim->state_mtx);
 	while (i < sim->num_coders)
 	{
 		if (sim->coders[i].compile_count < sim->target_compiles)
 		{
-			done = 0;
+			done = FALSE;
 			break ;
 		}
 		i++;
 	}
 	if (done && !sim->sim_stop)
-		sim->sim_stop = 1;
+		sim->sim_stop = TRUE;
 	pthread_mutex_unlock(&sim->state_mtx);
 	return (done);
 }

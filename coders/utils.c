@@ -20,9 +20,9 @@ long long	get_time_ms(void)
 	return ((tv.tv_sec * 1000) + (tv.tv_usec / 1000));
 }
 
-int	check_stop(t_sim *sim)
+t_bool	check_stop(t_sim *sim)
 {
-	int	stop;
+	t_bool	stop;
 
 	pthread_mutex_lock(&sim->state_mtx);
 	stop = sim->sim_stop;
@@ -30,7 +30,7 @@ int	check_stop(t_sim *sim)
 	return (stop);
 }
 
-void	sys_sleep(long long duration, t_sim *sim)
+t_bool	sys_sleep(long long duration, t_sim *sim)
 {
 	long long		start;
 
@@ -38,9 +38,10 @@ void	sys_sleep(long long duration, t_sim *sim)
 	while (get_time_ms() - start < duration)
 	{
 		if (check_stop(sim))
-			break ;
-		usleep(500);
+			return (FALSE);
+		usleep(1000);
 	}
+	return (TRUE);
 }
 
 void	print_state(t_sim *sim, int id, const char *msg)

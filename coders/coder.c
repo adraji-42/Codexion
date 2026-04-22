@@ -12,18 +12,20 @@
 
 #include "codexion.h"
 
-static void	coder_compile(t_coder *c)
+static t_bool	coder_compile(t_coder *c)
 {
 	pthread_mutex_lock(&c->sim->state_mtx);
 	c->last_compile_start = get_time_ms();
 	pthread_mutex_unlock(&c->sim->state_mtx);
 	print_state(c->sim, c->id, "is compiling");
-	sys_sleep(c->sim->t_compile, c->sim);
+	if (!sys_sleep(c->sim->t_compile, c->sim))
+		return (FALSE);
 	pthread_mutex_lock(&c->sim->state_mtx);
 	c->compile_count++;
 	pthread_mutex_unlock(&c->sim->state_mtx);
 	dongle_release(c->d2);
 	dongle_release(c->d1);
+	return (TRUE);
 }
 
 void	*coder_routine(void *arg)
@@ -31,7 +33,7 @@ void	*coder_routine(void *arg)
 	t_coder	*c;
 
 	c = (t_coder *)arg;
-	while (!check_stop(c->sim))
+	while (TRUE)
 	{
 		if (!dongle_take(c->d1, c))
 			break ;
@@ -40,11 +42,14 @@ void	*coder_routine(void *arg)
 			dongle_release(c->d1);
 			break ;
 		}
-		coder_compile(c);
+		if (!coder_compile(c))
+			break ;
 		print_state(c->sim, c->id, "is debugging");
-		sys_sleep(c->sim->t_debug, c->sim);
+		if (!sys_sleep(c->sim->t_debug, c->sim))
+			break ;
 		print_state(c->sim, c->id, "is refactoring");
-		sys_sleep(c->sim->t_refactor, c->sim);
+		if (!sys_sleep(c->sim->t_refactor, c->sim))
+			break ;
 	}
 	return (NULL);
 }

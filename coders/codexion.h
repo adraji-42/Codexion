@@ -90,13 +90,13 @@ struct s_sim
 	pthread_t		monitor;
 };
 
-int			init_sim(t_sim *sim);
+t_bool		init_sim(t_sim *sim);
 t_bool		parse_args(int ac, char **av, t_sim *s);
 
 long long	get_time_ms(void);
-void		sys_sleep(long long duration, t_sim *s);
+t_bool		sys_sleep(long long duration, t_sim *s);
 void		print_state(t_sim *sim, int id, const char *msg);
-int			check_stop(t_sim *sim);
+t_bool		check_stop(t_sim *sim);
 
 void		heap_push(t_heap *h, t_req req);
 void		heap_pop_id(t_heap *h, int id);
