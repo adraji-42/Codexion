@@ -96,7 +96,6 @@ int	main(int ac, char **av)
 		return (FAILD);
 	if (!init_sim(&sim))
 	{
-		free_sim(&sim);
 		fprintf(stderr, "ERROR: Init of simulation is faild");
 		return (FAILD);
 	}

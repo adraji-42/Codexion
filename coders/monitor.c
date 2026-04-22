@@ -18,14 +18,14 @@ static int	coder_dead(t_coder *c)
 	long long	limit;
 	int			dead;
 
-	dead = 0;
+	dead = FALSE;
 	pthread_mutex_lock(&c->sim->state_mtx);
 	limit = c->last_compile_start + c->sim->t_burnout;
 	now = get_time_ms();
 	if (now >= limit && !c->sim->sim_stop)
 	{
 		c->sim->sim_stop = 1;
-		dead = 1;
+		dead = TRUE;
 	}
 	pthread_mutex_unlock(&c->sim->state_mtx);
 	if (dead)
